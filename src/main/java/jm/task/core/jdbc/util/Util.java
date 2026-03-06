@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    // реализуйте настройку соеденения с БД
 
     private static Connection instance = null;
     private final static String DB_URL = "jdbc:postgresql://127.0.0.1:5432/postgres";
@@ -16,9 +15,8 @@ public class Util {
 
     public synchronized static Connection getInstance() throws ClassNotFoundException, SQLException {
         if (instance == null || instance.isClosed()) {
-//            Class.forName("org.postgresql.Driver");
             instance = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-            System.out.println("Соединение установлено");
+//            System.out.println("Соединение установлено");
         }
         return instance;
     }
