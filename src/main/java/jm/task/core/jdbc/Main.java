@@ -12,14 +12,6 @@ public class Main {
     private static UserService userService = new UserServiceImpl();
 
     public static void main(String[] args) {
-//        Connection connection = null;
-//        try {
-//            connection = Util.getInstance();
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
         userService.createUsersTable();
 
         userService.saveUser("Katy", "Krokk", (byte) 13);
@@ -27,9 +19,9 @@ public class Main {
         userService.saveUser("Sveta", "Gazova", (byte) 33);
         userService.saveUser("Pavlik", "Morozov", (byte) 23);
 
-        userService.getAllUsers();
-        userService.cleanUsersTable();
-        userService.dropUsersTable();;
+//        userService.getAllUsers();
+//        userService.cleanUsersTable();
+//        userService.dropUsersTable();;
 
     }
 }
