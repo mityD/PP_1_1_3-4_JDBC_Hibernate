@@ -3,27 +3,36 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private String createTable = "CREATE TABLE IF NOT EXISTS USERS (id SERIAL PRIMARY KEY, name VARCHAR(40), " +
-            "lastName VARCHAR(30), age INT)";
-    private String dropTable = "Drop TABLE IF EXISTS USERS";
-    private String saveUser = "INSERT INTO USERS(name, lastName, age) VALUES (?, ?, ?)";
-    private String removeUserById = "DELETE FROM USERS WHERE id = ?";
-    private String allUsers = "SELECT * FROM USERS";
-    private String cleanTable = "TRUNCATE TABLE USERS";
-
     public UserDaoJDBCImpl() {
+    }
+
+    private Properties uploadingFile() {
+        Properties properties = new Properties();
+        try (InputStream inputStream = new FileInputStream("src/main/resources/databaseQueries.properties")) {
+            properties.load(inputStream);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return properties;
     }
 
     public void createUsersTable() {
         try (Connection connection = Util.getInstance();
              Statement statement = connection.createStatement()) {
-            statement.execute(createTable);
+            statement.execute(uploadingFile().getProperty("createTable"));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -33,8 +42,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Connection connection = Util.getInstance();
-             PreparedStatement preparedStatement = connection.prepareStatement(dropTable)) {
-            preparedStatement.execute();
+             Statement statement = connection.createStatement()) {
+            statement.execute(uploadingFile().getProperty("dropTable"));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -44,7 +53,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try (Connection connection = Util.getInstance();
-             PreparedStatement preparedStatement = connection.prepareStatement(saveUser)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(uploadingFile()
+                     .getProperty("saveUser"))) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
@@ -58,7 +68,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         try (Connection connection = Util.getInstance();
-             PreparedStatement preparedStatement = connection.prepareStatement(removeUserById)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(uploadingFile()
+                     .getProperty("removeUserById"))) {
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -71,8 +82,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> listUsers = new ArrayList<>();
         try (Connection connection = Util.getInstance();
-             PreparedStatement preparedStatement = connection.prepareStatement(allUsers)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(uploadingFile().getProperty("allUsers"));
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 String lastName = resultSet.getString("lastName");
@@ -89,8 +100,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Connection connection = Util.getInstance();
-             PreparedStatement preparedStatement = connection.prepareStatement(cleanTable)) {
-            preparedStatement.execute();
+             Statement statement = connection.createStatement()) {
+            statement.execute(uploadingFile().getProperty("cleanTable"));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
