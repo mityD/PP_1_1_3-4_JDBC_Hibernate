@@ -35,21 +35,4 @@ public class Util {
         }
         return sessionFactory;
     }
-//    public synchronized static Connection getInstance() throws ClassNotFoundException, SQLException {
-//        Properties properties = new Properties();
-//        try (InputStream inputStream = new FileInputStream("src/main/resources/config.properties")) {
-//            properties.load(inputStream);
-//            if (instance == null || instance.isClosed()) {
-//                instance = DriverManager.getConnection(properties.getProperty("db.url"),
-//                        properties.getProperty("user"), properties.getProperty("password"));
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return instance;
-//    }
-
-
 }
