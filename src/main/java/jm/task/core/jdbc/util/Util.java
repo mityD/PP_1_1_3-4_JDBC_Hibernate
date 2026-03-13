@@ -17,7 +17,6 @@ import java.util.Properties;
 
 public class Util {
 
-    //    private static Connection instance = null;
     private static SessionFactory sessionFactory = getSessionFactory();
 
     public synchronized static SessionFactory getSessionFactory() {

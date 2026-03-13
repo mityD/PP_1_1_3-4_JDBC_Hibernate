@@ -4,7 +4,6 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public UserDaoHibernateImpl() {
 
     }
-//
+
     @Override
     public void createUsersTable() {
         Transaction transaction = null;
@@ -43,7 +42,6 @@ public class UserDaoHibernateImpl implements UserDao {
             }
             e.printStackTrace();
         }
-//        Util.getSessionFactory().openSession().createSQLQuery("Drop TABLE IF EXISTS USERS");
     }
 
     @Override
@@ -59,7 +57,6 @@ public class UserDaoHibernateImpl implements UserDao {
             }
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -83,8 +80,6 @@ public class UserDaoHibernateImpl implements UserDao {
         List<User> list = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             list = session.createQuery("FROM User").list();
-//            List<User> users = (List<User>) Util.getSessionFactory().openSession().createSQLQuery("FROM USERS").list();
-//            return users;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,6 +99,5 @@ public class UserDaoHibernateImpl implements UserDao {
             }
             e.printStackTrace();
         }
-//        Util.getSessionFactory().openSession().createSQLQuery("TRUNCATE TABLE USERS");
     }
 }
